@@ -11,7 +11,10 @@ const YieldToken = () => {
   const abi = YIELDTOKEN_ABI;
   
  ; // Replace with your contract address
-  const infuraUrl = 'https://mainnet.infura.io/v3/dc10a4b3a75349aab5abdf2314cbad35'; // Infura URL for Sepolia network
+  const infuraUrl = 'https://sepolia.infura.io/v3/dc10a4b3a75349aab5abdf2314cbad35'; // Infura URL for Sepolia network
+  const provider = new ethers.JsonRpcProvider(infuraUrl);
+  const walletAddress = "0xc7913E7954F77DcF81984ee0b5feE8f3eF740E16"
+
 
 
 //   useEffect(() => {
@@ -31,39 +34,7 @@ const YieldToken = () => {
 
 
   const mintTokens = async () => {
-    let signer = null;
-
-    let provider;
-    try{
-        if (window.ethereum == null) {
-            console.log("hi")
-            // If MetaMask is not installed, we use the default provider,
-            // which is backed by a variety of third-party services (such
-            // as INFURA). They do not have private keys installed,
-            // so they only have read-only access
-            console.log("MetaMask not installed; using read-only defaults")
-            provider = ethers.getDefaultProvider()
-    
-        } else {
-            console.log("hello")
-            // Connect to the MetaMask EIP-1193 object. This is a standard
-            // protocol that allows Ethers access to make all read-only
-            // requests through MetaMask.
-            provider = new ethers.JsonRpcProvider(infuraUrl)
-    
-            // It also provides an opportunity to request access to write
-            // operations, which will be performed by the private key
-            // that MetaMask manages for the user.
-            // signer = await provider.getSigner();
-            //@ts-ignore
-            const balance = await provider.getBalance(0x4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97n);
-            console.log(balance);
-        }
-    } catch (error) {
-        console.error(error);
-        console.log("Error");
-    }
-   
+    const contract = new ethers.Contract(walletAddress, abi, provider);
   };
 
   return (
