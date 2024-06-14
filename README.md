@@ -35,3 +35,22 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 # yield-trade
+
+
+Key Features of YieldTrade
+
+    Yield Tokenization:
+        Users can deposit XLM tokens into the YieldVault contract.
+        The deposited XLM tokens are locked for a specified duration.
+        In return, users receive yield tokens that represent the future yield from their deposits.
+
+    Fixed Yield Agreements:
+        YieldTrade offers fixed yield agreements with predetermined maturities.
+        Users know in advance the yield they will earn, providing certainty and predictability.
+        The yield calculation is based on a fixed annual percentage.
+
+    Marketplace for Yield Tokens:
+        Yield tokens can be traded in a marketplace.
+        Users can buy or sell yield tokens, providing liquidity and flexibility.
+        This creates opportunities for both yield farmers and speculators.
+# DeBank
