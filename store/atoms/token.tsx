@@ -10,3 +10,8 @@ export const durationAtom = atom({
     default : ""
 })
 
+export const idAtom = atom({
+    key : "idAtom",
+    default : 0
+})
+

@@ -4,7 +4,10 @@ import React from 'react';
 import Button from './Button';
 import { ethers } from 'ethers';
 import { useRecoilValue ,useSetRecoilState} from 'recoil';
-import { accountAtom,providerAtom } from '@/store/atoms/account';
+import { publicKeyAtom } from '@/store/atoms/account';
+import { useState } from 'react';
+import { checkConnection,retrievePublicKey } from './Freighter';
+
 
 declare global {
     interface Window {
@@ -13,31 +16,27 @@ declare global {
 }
 
 const Appbar: React.FC = () => {
-    const account = useRecoilValue(accountAtom)
-    const setAccount = useSetRecoilState(accountAtom)
-    const provider = useRecoilValue(providerAtom)
-    const setProvider = useSetRecoilState(providerAtom)
+    const publicKey = useRecoilValue(publicKeyAtom)
+    const getPublicKey = useSetRecoilState(publicKeyAtom)
+  const [connect, getConnected] = useState("Connect");
+
+   
 
 
     const connectWallet = async () => {
-        if (window.ethereum) {
-            try {
-              const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-              //@ts-ignore
-              setProvider(await new ethers.BrowserProvider(window.ethereum));
-              setAccount(accounts[0]);
-              console.log(account)
-              console.log(provider)
-            } catch (error) {
-              console.error("Error connecting to MetaMask", error);
-            }
-          } else {
-            alert("Please install MetaMask!");
-          }
-    };
+      if (await checkConnection()) {
+        let publicKey = await retrievePublicKey();
+        getPublicKey(publicKey);
+        console.log(publicKey);
+      }
+      }
+    
 
     return (
-        <Button onClick={connectWallet} text='connect metamask'/>
+      <div className="flex items-center justify-between p-4 bg-indigo-950">
+        <img src="logo-header.svg" alt='yolo' className='h-10' />
+        <Button onClick={connectWallet} text='Connect MetaMask' />
+      </div>
     );
 };
 

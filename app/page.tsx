@@ -2,16 +2,19 @@
 
 import Image from "next/image";
 import Appbar from "@/components/Appbar";
-import Ethers from "@/components/Ethers";
 import { RecoilRoot } from "recoil";
-import Token from "@/components/Token";
+import Deposit from "@/components/Deposit";
+import Withdraw from "@/components/Withdraw";
+import Marketplace from "@/components/Marketplace";
 
 export default function Home() {
   return (
     <div>
       <RecoilRoot>
    <Appbar />
-   <Token />
+   <Deposit />
+   <Withdraw />
+   <Marketplace />
 
    </RecoilRoot>
    </div>
