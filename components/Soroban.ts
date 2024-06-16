@@ -8,25 +8,22 @@ import {
 } from "@stellar/stellar-sdk";
 import { userSignTransaction } from './Freighter';
 import { getPublicKey } from '@stellar/freighter-api';
-import { amountAtom, durationAtom , idAtom} from '@/store/atoms/token';
-import { useRecoilValue } from 'recoil';
-import { priceAtom, offerIdAtom } from '@/store/atoms/offer'; 
 
-const accountToScVal = (account : any) => new Address(account).toScVal();
-
-const stringToSymbol = (value : any) => {
-    return nativeToScVal(value, { type: "symbol" })
-}
 
 let rpcUrl = "https://soroban-testnet.stellar.org";
-let contractAddress = 'CCJHM62AXEN3FAQCU4KBEPZT72PHLV6FHVFWQ57MHCLEG5CUMQ5QZOL7';
-
-
-// const amount = useRecoilValue(amountAtom);
-// const duration = useRecoilValue(durationAtom);
+let contractAddress = 'CAZSOHX7JE5ODC5I4FWMTZRKRMUJJXN3ULCAAM7STPELPZ3FFJK5WPMP';
 
 
 
+const i128ToScVal = (value : any) => {
+    return nativeToScVal(value, { type: "i128" })
+}
+
+const u64ToScVal = (value : any) => {
+    return nativeToScVal(value, { type: "u64" })
+}
+
+const accountToScVal = (account : any) => new Address(account).toScVal();
 
 
 let params = {
@@ -34,29 +31,30 @@ let params = {
     networkPassphrase: Networks.TESTNET
 }
 
+
+
+
 async function contractInt(caller : any, functName : any, values : any) {
-    console.log(`caller: ${caller}`)
     const provider = new SorobanRpc.Server(rpcUrl, { allowHttp: true });
-    console.log(`provider: ${provider}`)
     const contract = new Contract(contractAddress);
-    console.log(`contract: ${contract}`)
     const sourceAccount = await provider.getAccount(caller);
-    console.log(`sourceAccount: ${sourceAccount}`)
+    console.log(`source account : ${sourceAccount}`)
     let buildTx;
-
+    console.log(`source account : ${sourceAccount}`)
     if (values == null) {
-        console.log(functName)
-
         buildTx = new TransactionBuilder(sourceAccount, params)
         .addOperation(contract.call(functName))
         .setTimeout(30).build();
+        console.log(1)
     }
     else {
         buildTx = new TransactionBuilder(sourceAccount, params)
         .addOperation(contract.call(functName, ...values))
         .setTimeout(30).build();
+        console.log(2)
     }
     let _buildTx = await provider.prepareTransaction(buildTx);
+    console.log(`buildTx : ${_buildTx}`)
     let prepareTx = _buildTx.toXDR();
     let signedTx = await userSignTransaction(prepareTx, "TESTNET", caller);
     let tx = TransactionBuilder.fromXDR(signedTx, Networks.TESTNET);
@@ -83,72 +81,38 @@ async function contractInt(caller : any, functName : any, values : any) {
     }
 }
 
-
+// async function fetchPoll() {
+//     let caller = await getPublicKey();
+//     let result = await contractInt(caller, 'view_poll', null);
+//     let no = (result._value[0]._attributes.val._value).toString();
+//     let total = (result._value[1]._attributes.val._value).toString();
+//     let yes = (result._value[2]._attributes.val._value).toString()
+//     return [no, total, yes]
+// }
 
 // async function fetchVoter() {
 //     let caller = await getPublicKey();
 //     let voter = accountToScVal(caller);
 //     let result = await contractInt(caller, 'view_voter', [voter]);
-//     //@ts-ignore
-
 //     let selected = (result._value[0]._attributes.val._value).toString();
-//     //@ts-ignore
-
 //     let time = (result._value[1]._attributes.val._value).toString();
-//     //@ts-ignore
-
 //     let votes = (result._value[2]._attributes.val._value).toString();
 //     return [selected, time, votes]
 // }
 
-// async function vote(value : any) {
-//     let caller = await getPublicKey();
-//     let selected = stringToSymbol(value);
-//     let voter = accountToScVal(caller);
-//     let values = [voter, selected];
-//     let result = await contractInt(caller, 'record_votes', values);
-//     return result;
-// }
-
-async function depositTokens(){
- 
+async function deposit_token(duration : any, amount : any) {
+    let token = "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC"
     let caller = await getPublicKey();
-    console.log(`caller: ${caller}`)
-    let depositor = accountToScVal(caller);
-    console.log(`depositor: ${depositor}`)
-    let values = [1,1,depositor];
-    console.log(`values: ${values}`)
+    let voter = accountToScVal(caller);
+    let newToken = accountToScVal(token);
+    let values = [u64ToScVal(duration), i128ToScVal(amount), voter, newToken];
     let result = await contractInt(caller, 'deposit_token', values);
-    console.log(`result: ${result}`)
     return result;
 }
 
-async function withdrawTokens(){
-const id = useRecoilValue(idAtom);
-
-    let caller = await getPublicKey();
-    console.log(caller)
-
-    let result = await contractInt(caller, 'withdraw_token', id);
-    return result;
-}
-
-// async function sellYield(value : any){
-//     let caller = await getPublicKey();
-//     value = [id, price];
-//     let result = await contractInt(caller, 'buy_yield', value);
-//     return result;
-// }
-
-// async function buyYield(){
-//     let caller = await getPublicKey();
-//     let result = await contractInt(caller, 'sell_yield', offerId);
-//     return result;
-// }
 
 
 
 
 
-
-export { depositTokens, withdrawTokens};
+export {  deposit_token };

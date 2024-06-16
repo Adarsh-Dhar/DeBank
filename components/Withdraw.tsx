@@ -1,23 +1,27 @@
 "use client";
 
-import React from 'react';
 import Button from './Button';
-
-
+import { withdrawToken } from './Soroban';
 
 
 const Withdraw: React.FC = () => {
     
-
-
     const withdrawTokens = async () => {
-        console.log("tokens withdrawled")
+  try{
+    const response = await withdrawToken();
+    console.log(response);
+  }catch(e){
+    console.log(e);
+  }
+        
     };
+
+    
 
     return (
       <div>
         
-        <Button onClick={withdrawTokens} text='Withdraw Tokens' />
+        <Button onClick={withdrawTokens} text='withdraw Tokens' />
       </div>
     );
 };
