@@ -11,7 +11,7 @@ import { getPublicKey } from '@stellar/freighter-api';
 
 
 let rpcUrl = "https://soroban-testnet.stellar.org";
-let contractAddress = 'CAZSOHX7JE5ODC5I4FWMTZRKRMUJJXN3ULCAAM7STPELPZ3FFJK5WPMP';
+let contractAddress = 'CAGDTX4FFH2H64HCS53IQU5YTZUDAZU4ZCIWOBHGTPM4GOFIDA2L5NOX';
 
 
 
@@ -110,9 +110,26 @@ async function deposit_token(duration : any, amount : any) {
     return result;
 }
 
+async function withdraw_token() {
+    let token = "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC"
+    let caller = await getPublicKey();
+    let voter = accountToScVal(caller);
+    let newToken = accountToScVal(token);
+    let values = [ voter, newToken];
+    let result = await contractInt(caller, 'withdraw_token', values);
+    return result;
+}
+
+async function view_all_agreement() {
+    let caller = await getPublicKey();
+    let result = await contractInt(caller, 'view_all_agreement', null);
+    
+    return result
+}
 
 
 
 
 
-export {  deposit_token };
+
+export {  deposit_token, withdraw_token, view_all_agreement };

@@ -6,17 +6,17 @@ use soroban_sdk::{contractimpl, contract, Env, Address, Symbol, symbol_short,tok
 #[derive(Clone)]
 pub struct Agreement {
    
-    pub owner: Address,
+    pub owner: Address, //6
     pub token : Address,
-    pub price : i128,
-    pub initialAmount: i128,
-    pub finalAmount : i128,
-    pub startTime: u64,
-    pub endTime: u64,
-    pub withdrawn: bool,
-    pub onMarket : bool,
-    pub active : bool,
-    pub timeLeft : u64,
+    pub price : i128, //7
+    pub initialAmount: i128, //4
+    pub finalAmount : i128, //3
+    pub startTime: u64, //8
+    pub endTime: u64, //2
+    pub withdrawn: bool, //10
+    pub onMarket : bool, //5
+    pub active : bool, //1
+    pub timeLeft : u64, //9
     
 }
 
@@ -38,7 +38,7 @@ impl YieldVault {
   
 
     // Deposit function for XLM and create a agreement
-    pub fn deposit_token(env: Env, duration: u64, amount : i128, owner : Address, token : Address) -> Agreement{
+    pub fn deposit_token(env: Env, duration: u64, amount : i128, owner : Address, token : Address) -> Symbol{
        if amount <= 0 {
         panic!("Amount must be greater than 0");
        }
@@ -58,7 +58,7 @@ impl YieldVault {
 
 
 
-    let yield_earned = (amount * duration as i128) / 648000 ;
+    let yield_earned = (amount * duration as i128) / 6 ;
 
     log!(&env, "yield_earned is: {}", yield_earned);
 
@@ -109,82 +109,92 @@ impl YieldVault {
 
      
     env.storage().instance().set(&DataKey::Init, &());
+    env.storage().instance().extend_ttl(100, 100);
 
 
-
-    let agreement: Agreement = env.storage().instance().get(&DataKey::AgreementAddress).unwrap();
-     log!(&env, "agreement is: {:?}", agreement);
-    
-    log!(&env, "amount is: {}", agreement.initialAmount);
-
-
-
-    agreement
+    log!(&env, "Token Registered!");
+    symbol_short!("Recorded") 
+  
 
     }
 
-    // pub fn withdraw_token(env: Env, amount : i128, owner : Address, token : Address){
-    //     owner.require_auth();
+    pub fn withdraw_token(env: Env, owner : Address, token : Address) -> Symbol{
+        owner.require_auth();
 
-    //     let agreement: Agreement =
-    //     env.storage().instance().get(&DataKey::AgreementAddress).unwrap();
+        let mut agreement: Agreement =
+        env.storage().instance().get(&DataKey::AgreementAddress).unwrap();
 
-    //     if agreement.withdrawn == true{
-    //         panic!("Yield has already been withdrawn");
-    //     }
+        if agreement.withdrawn == true{
+            panic!("Yield has already been withdrawn");
+        }
 
-    //     if agreement.endTime < env.ledger().timestamp(){
-    //         panic!("Yield has not matured yet");
-    //     }
+        if agreement.endTime < env.ledger().timestamp(){
+            panic!("Yield has not matured yet");
+        }
 
 
-    //     token::Client::new(&env, &agreement.token).transfer(
-    //         &env.current_contract_address(),
-    //         &owner,
-    //         &agreement.finalAmount,
-    //     );
 
-    //     env.storage().instance().remove(&DataKey::AgreementAddress)
+        token::Client::new(&env, &token).transfer(
+            &env.current_contract_address(),
+            &owner,
+            &agreement.finalAmount,
+        );
 
-    // }
+        agreement.withdrawn = true;
+
+
+        symbol_short!("WITHDRAWN")
+
+    }
 
     fn is_initialized(env: &Env) -> bool {
         env.storage().instance().has(&DataKey::Init)
         
     }
 
-    // pub fn sell_agreement(env: Env, price: i128, owner : Address, token : Address) {
+    pub fn view_all_agreement(env : Env) -> Agreement {
+        
+        env.storage().instance().get(&DataKey::AgreementAddress).unwrap()
 
-    //     owner.require_auth();
+       
 
-    //     let mut agreement: Agreement =
-    //     env.storage().instance().get(&DataKey::AgreementAddress).unwrap();
+    }
 
-    //     if agreement.withdrawn == true{
-    //         panic!("Yield has already been withdrawn");
-    //     }
+    pub fn sell_agreement(env: Env, price: i128, owner : Address, token : Address) -> Agreement {
 
-    //     if agreement.endTime >= env.ledger().timestamp(){
-    //         panic!("Yield has been matured");
-    //     }
+        owner.require_auth();
 
-    //     if price <= 0 {
-    //         panic!("Price must be greater than 0");
-    //     }
+        let mut agreement: Agreement =
+        env.storage().instance().get(&DataKey::AgreementAddress).unwrap();
 
-    //     if price >= agreement.finalAmount {
-    //         panic!("Price must be less than the final amount");
-    //     }
+        if agreement.withdrawn == true{
+            panic!("Yield has already been withdrawn");
+        }
 
-    //     agreement.onMarket = true;
-    //     agreement.price = price;
-    //     agreement.active = true;
+        if agreement.endTime >= env.ledger().timestamp(){
+            panic!("Yield has been matured");
+        }
+
+        if price <= 0 {
+            panic!("Price must be greater than 0");
+        }
+
+        if price >= agreement.finalAmount {
+            panic!("Price must be less than the final amount");
+        }
+
+        agreement.onMarket = true;
+        agreement.price = price;
+        agreement.active = true;
 
         
 
-    //     env.storage().instance().set(&DataKey::Init, &());
+        env.storage().instance().set(&DataKey::Init, &());
+        env.storage().instance().extend_ttl(100, 100);
+
+        env.storage().instance().get(&DataKey::AgreementAddress).unwrap()
        
-    // }
+    }
 
     // pub fn show_agreement(env: Env) -> Option<Agreement> {
     //     let agreement: Agreement =

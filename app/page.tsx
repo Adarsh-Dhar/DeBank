@@ -4,6 +4,8 @@ import Image from "next/image";
 import Appbar from "@/components/Appbar";
 import { RecoilRoot } from "recoil";
 import Deposit from "@/components/Deposit";
+import Withdraw from "@/components/Withdraw";
+import AllAgreement from "@/components/AllAgreement";
 
 export default function Home() {
   return (
@@ -11,7 +13,8 @@ export default function Home() {
       <RecoilRoot>
    <Appbar />
    <Deposit />
-   {/* <Withdraw /> */}
+   <Withdraw />
+   <AllAgreement />
    
 
    </RecoilRoot>
