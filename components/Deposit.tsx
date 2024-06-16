@@ -7,6 +7,7 @@ import { publicKeyAtom } from '@/store/atoms/account';
 import { useRecoilValue } from 'recoil';
 import Input from './Input';
 import { get } from 'http';
+import Link from "next/link";
 
 
 
@@ -103,7 +104,9 @@ const Deposit: React.FC = () => {
         <Input value={duration} onChange={(e : any) => setDuration(e.target.value)} type='number' text='Duration' placeholder='Till how much duration you want to keep the token....' />
 
         <Button onClick={depositToken} text='Deposit Tokens' />
+        <Link href="/agreements" passHref>
         <Button onClick={viewAgreement} text='View Agreements' />
+        </Link>
       </div>
     );
 };

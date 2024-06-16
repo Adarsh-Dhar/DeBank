@@ -34,7 +34,6 @@ const Appbar: React.FC = () => {
 
     return (
       <div className="flex items-center justify-between p-4 bg-indigo-950">
-        <img src="logo-header.svg" alt='yolo' className='h-10' />
         <Button onClick={connectWallet} text='Connect Freighter' />
       </div>
     );

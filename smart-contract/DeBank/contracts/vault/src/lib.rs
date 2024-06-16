@@ -6,17 +6,17 @@ use soroban_sdk::{contractimpl, contract, Env, Address, Symbol, symbol_short,tok
 #[derive(Clone)]
 pub struct Agreement {
    
-    pub owner: Address, //6
-    pub token : Address,
-    pub price : i128, //7
-    pub initialAmount: i128, //4
-    pub finalAmount : i128, //3
-    pub startTime: u64, //8
-    pub endTime: u64, //2
+    pub owner: Address, //5
+    pub token : Address, //9
+    pub price : i128, //6
+    pub initialAmount: i128, //3
+    pub finalAmount : i128, //2
+    pub startTime: u64, //7
+    pub endTime: u64, //1
     pub withdrawn: bool, //10
-    pub onMarket : bool, //5
-    pub active : bool, //1
-    pub timeLeft : u64, //9
+    pub onMarket : bool, //4
+    pub active : bool, //0
+    pub timeLeft : u64, //8
     
 }
 
@@ -196,63 +196,63 @@ impl YieldVault {
        
     }
 
-    // pub fn show_agreement(env: Env) -> Option<Agreement> {
-    //     let agreement: Agreement =
-    //     env.storage().instance().get(&DataKey::AgreementAddress).unwrap();
+    pub fn show_agreement(env: Env) -> Option<Agreement> {
+        let agreement: Agreement =
+        env.storage().instance().get(&DataKey::AgreementAddress).unwrap();
 
-    //     if agreement.onMarket == false {
-    //         return None;
-    //     } else {
-    //         return core::prelude::v1::Some(agreement);
-    //     }
+        if agreement.onMarket == false {
+            return None;
+        } else {
+            return core::prelude::v1::Some(agreement);
+        }
 
-    // }
+    }
 
-    // pub fn show_my_agreement(env: Env, owner : Address) -> Option<Agreement> {
-    //     let agreement: Agreement =
-    //     env.storage().instance().get(&DataKey::AgreementAddress).unwrap();
+    pub fn show_my_agreement(env: Env, owner : Address) -> Option<Agreement> {
+        let agreement: Agreement =
+        env.storage().instance().get(&DataKey::AgreementAddress).unwrap();
 
-    //     if agreement.owner != owner {
-    //         return None;
-    //     } else {
-    //         return core::prelude::v1::Some(agreement);   
-    //     }
+        if agreement.owner != owner {
+            return None;
+        } else {
+            return core::prelude::v1::Some(agreement);   
+        }
 
-    // }
+    }
 
-    // pub fn buy_agreement(env: Env, buyer : Address, token : Address){
-    //     buyer.require_auth();
+    pub fn buy_agreement(env: Env, buyer : Address, token : Address){
+        buyer.require_auth();
 
-    //     let mut agreement: Agreement =
-    //     env.storage().instance().get(&DataKey::AgreementAddress).unwrap();
+        let mut agreement: Agreement =
+        env.storage().instance().get(&DataKey::AgreementAddress).unwrap();
 
-    //     if agreement.onMarket == false {
-    //         panic!("Agreement is not on market");
-    //     }
+        if agreement.onMarket == false {
+            panic!("Agreement is not on market");
+        }
 
-    //     if agreement.active == false {
-    //         panic!("Agreement is not active");
-    //     }
+        if agreement.active == false {
+            panic!("Agreement is not active");
+        }
 
-    //     if agreement.price <= 0 {
-    //         panic!("Price must be greater than 0");
-    //     }
+        if agreement.price <= 0 {
+            panic!("Price must be greater than 0");
+        }
 
-    //     if agreement.price >= agreement.finalAmount {
-    //         panic!("Price must be less than the final amount");
-    //     }
+        if agreement.price >= agreement.finalAmount {
+            panic!("Price must be less than the final amount");
+        }
 
-    //     token::Client::new(&env, &token).transfer(
-    //         &agreement.owner,
-    //         &buyer,
-    //         &agreement.price,
-    //     );
+        token::Client::new(&env, &token).transfer(
+            &agreement.owner,
+            &buyer,
+            &agreement.price,
+        );
 
-    //     agreement.onMarket = false;
-    //     agreement.active = false;
-    //     agreement.owner = buyer;
+        agreement.onMarket = false;
+        agreement.active = false;
+        agreement.owner = buyer;
 
-    //     env.storage().instance().set(&DataKey::AgreementAddress, &agreement);
-    // }
+        env.storage().instance().set(&DataKey::AgreementAddress, &agreement);
+    }
 
 }

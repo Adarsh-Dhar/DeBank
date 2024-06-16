@@ -27,4 +27,18 @@ soroban contract deploy \
   --wasm target/wasm32-unknown-unknown/release/hello_world.wasm \
   --source adarsh \
   --network testnet
-CAFWPEBYDFKR5SUPKDOIGDOPZ7SLSTIGEUZ4WRJYLKTBZF7RDP4CS2E4
+CANEHW2NMJUNOHMR23FHCGSF6YXWYZKCHOHPDOFNJ6P42RUACPHP5HFM
+
+soroban keys address alice
+GCO3LXBZDY7D5EHHRYNUKTUSUSM7BXBB6PCVAFVMOEADIRW6TGX6IPBI
+
+
+soroban contract build 
+
+cargo build --target wasm32-unknown-unknown --release 
+
+soroban contract optimize --wasm target/wasm32-unknown-unknown/release/hello_world.wasm
+
+soroban contract deploy \                                                          --wasm target/wasm32-unknown-unknown/release/hello_world.wasm \
+  --source alice \
+  --network testnet

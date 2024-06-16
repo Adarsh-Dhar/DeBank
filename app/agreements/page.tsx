@@ -12,7 +12,6 @@ export default function Home() {
     <div>
       <RecoilRoot>
    <Appbar />
-   <Deposit />
    <Marketplace />
   
    </RecoilRoot>

@@ -11,7 +11,7 @@ import { getPublicKey } from '@stellar/freighter-api';
 
 
 let rpcUrl = "https://soroban-testnet.stellar.org";
-let contractAddress = 'CAGDTX4FFH2H64HCS53IQU5YTZUDAZU4ZCIWOBHGTPM4GOFIDA2L5NOX';
+let contractAddress = 'CBAMTMBMOECISX7P4ENQRFHL4HJS3TX5HZZ6MUKPR5TUN5IBAGY6DHHN';
 
 
 
@@ -81,24 +81,7 @@ async function contractInt(caller : any, functName : any, values : any) {
     }
 }
 
-// async function fetchPoll() {
-//     let caller = await getPublicKey();
-//     let result = await contractInt(caller, 'view_poll', null);
-//     let no = (result._value[0]._attributes.val._value).toString();
-//     let total = (result._value[1]._attributes.val._value).toString();
-//     let yes = (result._value[2]._attributes.val._value).toString()
-//     return [no, total, yes]
-// }
 
-// async function fetchVoter() {
-//     let caller = await getPublicKey();
-//     let voter = accountToScVal(caller);
-//     let result = await contractInt(caller, 'view_voter', [voter]);
-//     let selected = (result._value[0]._attributes.val._value).toString();
-//     let time = (result._value[1]._attributes.val._value).toString();
-//     let votes = (result._value[2]._attributes.val._value).toString();
-//     return [selected, time, votes]
-// }
 
 async function deposit_token(duration : any, amount : any) {
     let token = "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC"
@@ -106,6 +89,19 @@ async function deposit_token(duration : any, amount : any) {
     let voter = accountToScVal(caller);
     let newToken = accountToScVal(token);
     let values = [u64ToScVal(duration), i128ToScVal(amount), voter, newToken];
+    let result = await contractInt(caller, 'deposit_token', values);
+    return result;
+}
+
+
+async function buy_token() {
+    let token = "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC"
+    let owner = "GBYP2HMUTRQ3I3WL3LDPKGO5KF7R5JVINSJIW7R5YUS2WLGQY7SXM3AA"
+    let newOwner = accountToScVal(owner);
+    let caller = await getPublicKey();
+    let buyer = accountToScVal(caller);
+    let newToken = accountToScVal(token);
+    let values = [i128ToScVal(170000000),newOwner , newToken,buyer];
     let result = await contractInt(caller, 'deposit_token', values);
     return result;
 }
@@ -132,4 +128,4 @@ async function view_all_agreement() {
 
 
 
-export {  deposit_token, withdraw_token, view_all_agreement };
+export {  deposit_token, withdraw_token, view_all_agreement,buy_token };
