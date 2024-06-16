@@ -1,57 +1,53 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Welcome to DeBank -> A decentralised safe yet profitable investment solution
 
-## Getting Started
+All the irregularities in ROI in investments with the likes of equity and crypto trading deBank aims to give a stable interest rate on your investments. But you might be wondering that you can also earn stable ROI by depositing your money to the bank but banks hardly give 3-4 % interest rate. On the otherside we aim to give 6-9 % rate of interest. But you can also earn that through fixed deposit right ? WRONG fixed deposit charges you a hefty fee if you want to take out the money before maturity.
 
-First, run the development server:
+But how does DeBank solves that. We have a simple user workflow the user deposits their token and in exchange get an agreement. After the maturity of the agreement user can withdraw the token with the interest rate. BUT WHAT IF I WANT TO WITHDRAW BEFORE MATURITY ? Don't worry we got you covered . We have a secondary market where you can sell your agreement and the person you sell to becomes the owner of the agreement. Now oviously you won't get as much money as you were initially getting through withdrawl but it will be pretty useful in case of emergency.
 
-```bash
+
+
+![alt text](Untitled(2).png)
+
+how to start the file 
+
+install node, npm and other dependency
+
+install all dependency needed by stellar from [text](https://developers.stellar.org/docs/smart-contracts/getting-started/setup)
+
+clone the repo 
+
+npm install
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+go to the smart-contract/DeBank
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+add the testnet 
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# yield-trade
+soroban network add \
+  --global testnet \
+  --rpc-url https://soroban-testnet.stellar.org:443 \
+  --network-passphrase "Test SDF Network ; September 2015"
 
 
-Key Features of YieldTrade
+get key
 
-    Yield Tokenization:
-        Users can deposit XLM tokens into the YieldVault contract.
-        The deposited XLM tokens are locked for a specified duration.
-        In return, users receive yield tokens that represent the future yield from their deposits.
+soroban keys generate --global alice --network testnet
 
-    Fixed Yield Agreements:
-        YieldTrade offers fixed yield agreements with predetermined maturities.
-        Users know in advance the yield they will earn, providing certainty and predictability.
-        The yield calculation is based on a fixed annual percentage.
 
-    Marketplace for Yield Tokens:
-        Yield tokens can be traded in a marketplace.
-        Users can buy or sell yield tokens, providing liquidity and flexibility.
-        This creates opportunities for both yield farmers and speculators.
-# DeBank
-# DeBank
+soroban contract build
+
+cargo build --target wasm32-unknown-unknown --release
+
+soroban contract optimize --wasm target/wasm32-unknown-unknown/release/hello_world.wasm
+
+soroban contract deploy \
+  --wasm target/wasm32-unknown-unknown/release/hello_world.wasm \
+  --source alice \
+  --network testnet
+
+
+  ![alt text](<Screenshot 2024-06-16 at 7.47.30 PM.png>) 
+  ![alt text](<Screenshot 2024-06-16 at 7.47.21 PM.png>) 
+  ![alt text](<Screenshot 2024-06-16 at 7.47.12 PM.png>) 
+  ![alt text](<Screenshot 2024-06-16 at 7.47.03 PM.png>)
